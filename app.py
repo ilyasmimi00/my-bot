@@ -1,3 +1,4 @@
+# app.py
 from flask import Flask, request
 import telebot
 from config import TOKEN, DOMAIN
@@ -15,6 +16,9 @@ def webhook():
     return "OK", 200
 
 if __name__ == "__main__":
+    # إزالة أي Webhook سابق
     bot.remove_webhook()
+    # تعيين Webhook جديد على عنوان Railway
     bot.set_webhook(url=f"{DOMAIN}/{TOKEN}")
+    print("Bot webhook is set, Flask app is running...")
     app.run(host="0.0.0.0", port=8000)
