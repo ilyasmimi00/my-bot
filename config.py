@@ -1,23 +1,26 @@
 # config.py
 import os
-import mysql.connector
+from pymongo import MongoClient
 
-# قراءة معلومات MySQL من Environment Variables
-DB_HOST = os.getenv("mysql.railway.internal")                  # المضيف
-DB_USER = os.getenv("root")                  # اسم المستخدم
-DB_PASSWORD = os.getenv("qhMPPqklAOWdIJIrJTMrkIsrywwAmuOe")    # كلمة المرور
-DB_NAME = os.getenv("railway")             # اسم قاعدة البيانات
-DB_PORT = int(os.getenv("root", 3306))       # المنفذ، الافتراضي 3306
+# قراءة المتغيرات من Environment Variables
+MONGODB_URI = os.getenv("mongodb+srv://eliasguerbas_db_user:baydonN1992@cluster0.gxisjmy.mongodb.net/botdb?retryWrites=true&w=majority")
+TOKEN = os.getenv("8446018051:AAGOFSu5hsIAyUoVlXnooX3iFGOK4jeOrqI")
+DOMAIN = os.getenv("https://my-bot.up.railway.app")
 
-# توكن البوت ورابط المشروع (DOMAIN)
-TOKEN = os.getenv("8446018051:AAGOFSu5hsIAyUoVlXnooX3iFGOK4jeOrqI")                        # ضع توكن البوت كـ Variable على Railway
-DOMAIN = os.getenv("https://my-bot.up.railway.app")                      # رابط مشروعك على Railway
+# تحقق أن القيم موجودة
+if not MONGODB_URI:
+    raise ValueError("MONGODB_URI is not set in environment variables")
 
-# إنشاء اتصال قاعدة البيانات
-db = mysql.connector.connect(
-    host=DB_HOST,
-    user=DB_USER,
-    password=DB_PASSWORD,
-    database=DB_NAME,
-    port=DB_PORT
-)
+if not TOKEN:
+    raise ValueError("TOKEN is not set in environment variables")
+
+if not DOMAIN:
+    raise ValueError("DOMAIN is not set in environment variables")
+
+# إنشاء الاتصال بقاعدة البيانات
+client = MongoClient(MONGODB_URI)
+
+# اختيار قاعدة البيانات
+db = client["botdb"]
+
+print("✅ MongoDB connected successfully")
